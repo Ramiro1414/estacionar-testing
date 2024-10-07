@@ -213,3 +213,53 @@ Then('se generan dos infracciones para la patente {string}', function (patenteQu
         return false;
     }
 });
+
+// Funcion de poligonos
+
+Given('que la persona se encuentra en {float} y {float}', function (latitud, longitud) {
+    this.latitud = latitud;
+    this.longitud = longitud;
+});
+
+When('se ejecuta la funcion para determinar si esta en un poligono', function () {
+
+    let res = request('GET', encodeURI(`http://if012estm.fi.mdn.unp.edu.ar:28003/poligonos/dentro-de-poligono/${this.latitud},${this.longitud}`),
+    {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    this.response = JSON.parse(res.getBody('utf8'));
+
+    this.idPoligono = this.response.data;
+});
+
+Then('se obtiene como resultado que se encuentran en el poligono con nombre {string}', function (nombrePoligono) {
+    
+    let res = request('GET', encodeURI(`http://if012estm.fi.mdn.unp.edu.ar:28003/poligonos/id/${this.idPoligono}`),
+    {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    this.response = JSON.parse(res.getBody('utf8'));
+
+    this.nombrePoligono = this.response.data.nombre;
+
+    if (this.nombrePoligono === nombrePoligono) {
+        return true;
+    } else {
+        return false;
+    }
+});
+
+Then('se obtiene que no se encuentra en ningun poligono de estacionamiento', function () {
+
+    if (this.idPoligono === -1) {
+        return true;
+    } else {
+        return false;
+    }
+});
