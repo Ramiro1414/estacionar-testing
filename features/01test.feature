@@ -82,7 +82,7 @@ Característica: Cruzamiento de registros de agentes de transito y registros de 
     Cuando se realiza el cruzamiento de registros
     Entonces se genera una infraccion para la patente "SWK 111"
 
-  Esquema del escenario: Multiples registros de conductor con multiples registros de agente de transito con una infraccion
+  Esquema del escenario: Multiples registros de conductor con multiples registros de agente de transito con dos infracciones en distintas ubicaciones
     Dado que se reciben los registros de conductor
     | horaInicio                    | horaFin                       | patente |
     | 2024-09-25T16:10:00.000+00:00 | 2024-09-25T16:45:00.000+00:00 | EHL 540 |
@@ -94,3 +94,16 @@ Característica: Cruzamiento de registros de agentes de transito y registros de 
     | 2024-09-25T20:26:00.000+00:00 | -42.737254 | -65.031611 | EHL 540                       |
     Cuando se realiza el cruzamiento de registros
     Entonces se generan dos infracciones para la patente "EHL 540"
+
+  Esquema del escenario: Multiples registros de conductor con multiples registros de agente de transito con dos infracciones en la misma ubicacion
+    Dado que se reciben los registros de conductor
+    | horaInicio                    | horaFin                       | patente |
+    | 2024-09-25T13:00:00.000+00:00 | 2024-09-25T14:00:00.000+00:00 | LOW 150 |
+    | 2024-09-25T18:00:00.000+00:00 | 2024-09-25T19:00:00.000+00:00 | LOW 150 |
+    Y que se reciben los registros de agente de transito
+    | horaRegistro                  | latitud    | longitud   | patenteRegistroAgenteTransito |
+    | 2024-09-25T12:52:00.000+00:00 | -42.737254 | -65.031611 | LOW 150                       |
+    | 2024-09-25T14:05:00.000+00:00 | -42.737254 | -65.031611 | LOW 150                       |
+    | 2024-09-25T19:21:00.000+00:00 | -42.737254 | -65.031611 | LOW 150                       |
+    Cuando se realiza el cruzamiento de registros
+    Entonces se generan dos infracciones para la patente "LOW 150"

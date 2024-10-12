@@ -197,20 +197,20 @@ Then('se generan dos infracciones para la patente {string}', function (patenteQu
     let data = this.response.data;
 
     // Contador de infracciones para la patente
-    let contadorDeInfracciones = 0;
+    this.contadorDeInfracciones = 0;
 
     // Iterar sobre todos los registros y contar las veces que aparece la patente
     data.forEach(item => {
         if (item.registroAgenteTransito.patente === patenteQueCometeInfraccion) {
-            contadorDeInfracciones++;
+            this.contadorDeInfracciones++;
+            console.log("PATENTE ENCONTRADA: " + item.registroAgenteTransito.patente);
         }
     });
 
-    // Verificar si la patente aparece exactamente dos veces
-    if (contadorDeInfracciones === 2) {
-        return true;  // Si se generaron dos infracciones, la prueba pasa
+    if (this.contadorDeInfracciones === 2) {
+        return true;
     } else {
-        return false;
+        throw new Error("Se esperaban 2 infracciones, pero se recibieron: " + this.contadorDeInfracciones);
     }
 });
 
